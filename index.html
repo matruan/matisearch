@@ -126,7 +126,7 @@
     </div>
 
     <div class="status-bar">
-        SISTEMA: SKYNET OS | SESIÓN: ANON_USER | PROTOCOLO: HTTP/INDIE
+        SISTEMA: SKYNET OS | SESION: ANONYMOUS_USER | TRAF_NODOS: [<span id="visit-count" style="color: #00ff41;">0000</span>]
     </div>
 </div>
 
@@ -223,6 +223,25 @@
             resultsContainer.innerHTML = '<p style="color: #ff4444;">[!] ERROR: No se han encontrado registros para esa consulta.</p>';
         }
     });
+
+   
+    function actualizarContador() {
+        const countElement = document.getElementById('visit-count');
+        
+        // Usamos un servicio sencillo que no requiere configuración
+        fetch('https://api.counterapi.dev/v1/matisearch/main/increment')
+            .then(res => res.json())
+            .then(res => {
+                // Formateamos el número para que siempre tenga 4 dígitos (estética Pro)
+                const count = res.count.toString().padStart(4, '0');
+                countElement.innerText = count;
+            })
+            .catch(() => {
+                countElement.innerText = "ERROR_LOG";
+            });
+    }
+
+    actualizarContador();
 </script>
 
 </body>
