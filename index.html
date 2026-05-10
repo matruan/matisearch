@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>matiSearch v1.0 - Terminal</title>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #00ff41; /* Verde Terminal Clásico */
+            font-family: 'Courier New', Courier, monospace;
+            padding: 30px;
+            line-height: 1.4;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            white-space: pre;
+            margin-bottom: 30px;
+            color: #00ff41;
+            font-weight: bold;
+            text-shadow: 0 0 5px #00ff41;
+        }
+
+        .input-area {
+            display: flex;
+            align-items: center;
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #333;
+        }
+
+        .prompt {
+            color: #ff00ff; /* Un toque magenta para el prompt */
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        input {
+            background: transparent;
+            border: none;
+            color: #00ff41;
+            font-family: inherit;
+            font-size: 1.1em;
+            outline: none;
+            width: 100%;
+        }
+
+        #results {
+            margin-top: 30px;
+        }
+
+        .result-item {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #1a1a1a;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .result-title:hover {
+            background: #00ff41;
+            color: #000;
+        }
+
+        .result-url {
+            color: #008f11;
+            font-size: 0.85em;
+            display: block;
+            margin: 4px 0;
+        }
+
+        .result-desc {
+            color: #aaa;
+            font-size: 0.95em;
+        }
+
+        .status-bar {
+            margin-top: 50px;
+            font-size: 0.8em;
+            color: #444;
+            border-top: 1px solid #1a1a1a;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+                  _   _   _____                     _     
+                 | | (_) / ____|                   | |    
+  _ __ ___   __ _| |_ _ | (___   ___  __ _ _ __ ___| |__  
+ | '_ ` _ \ / _` | __| | \___ \ / _ \/ _` | '__/ __| '_ \ 
+ | | | | | | (_| | |_| | ____) |  __/ (_| | | | (__| | | |
+ |_| |_| |_|\__,_|\__|_||_____/ \___|\__,_|_|  \___|_| |_|
+ ---------------------------------------------------------
+ > Inicializando matiSearch v1.0...
+ > Nodos indexados: 4
+ > Estado: Listo para peticiones.
+    </div>
+
+    <div class="input-area">
+        <span class="prompt">mati@engine:~$</span>
+        <input type="text" id="searchInput" placeholder="Buscar en la web profunda..." autofocus>
+    </div>
+
+    <div id="results">
+        <!-- Los resultados se inyectan aquí -->
+    </div>
+
+    <div class="status-bar">
+        SISTEMA: SKYNET OS | SESIÓN: ANON_USER | PROTOCOLO: HTTP/INDIE
+    </div>
+</div>
+
+<script>
+    const database = [
+        {
+            title: "Low-tech Magazine",
+            url: "https://solar.lowtechmagazine.com",
+            desc: "Revista técnica que funciona con energía solar real. Un oasis de eficiencia."
+        },
+        {
+            title: "Marginalia Search",
+            url: "https://search.marginalia.nu",
+            desc: "Motor de búsqueda que prioriza sitios de texto y evita el spam comercial."
+        },
+        {
+            title: "The Toaster Museum",
+            url: "http://www.toaster.org",
+            desc: "Archivo histórico de tostadoras. La web curiosa y honesta que ya no se ve."
+        },
+        {
+            title: "Wiby",
+            url: "https://wiby.me",
+            desc: "Buscador para la web clásica. Solo HTML ligero y contenido real."
+        }
+    ];
+
+    const input = document.getElementById('searchInput');
+    const resultsContainer = document.getElementById('results');
+
+    input.addEventListener('input', function() {
+        const query = input.value.toLowerCase();
+        resultsContainer.innerHTML = '';
+
+        if (query.length < 2) return;
+
+        const filtered = database.filter(site => 
+            site.title.toLowerCase().includes(query) || 
+            site.desc.toLowerCase().includes(query)
+        );
+
+        filtered.forEach(site => {
+            const div = document.createElement('div');
+            div.className = 'result-item';
+            div.innerHTML = `
+                <a href="${site.url}" class="result-title" target="_blank">> ${site.title}</a>
+                <span class="result-url">${site.url}</span>
+                <p class="result-desc">${site.desc}</p>
+            `;
+            resultsContainer.appendChild(div);
+        });
+
+        if (filtered.length === 0 && query.length > 2) {
+            resultsContainer.innerHTML = '<p style="color: #ff4444;">[!] ERROR: No se han encontrado registros para esa consulta.</p>';
+        }
+    });
+</script>
+
+</body>
+</html>
